@@ -8,9 +8,8 @@ x-party-common: &party-common
   volumes:
     - ./artifacts:/artifacts
     - ./dkg.docker.conf:/app/dkg.docker.conf:ro
-  devices:
-    - /dev/sgx_enclave:/dev/sgx_enclave
-    - /dev/sgx_provision:/dev/sgx_provision
+  environment:
+    OE_SIMULATION: "${OE_SIMULATION:-1}"
   restart: unless-stopped
 
 services:

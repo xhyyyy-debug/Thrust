@@ -1,0 +1,22 @@
+x-party-sgx: &party-sgx
+  environment:
+    OE_SIMULATION: "0"
+  devices:
+    - /dev/sgx_enclave:/dev/sgx_enclave
+    - /dev/sgx_provision:/dev/sgx_provision
+
+services:
+  party1:
+    <<: *party-sgx
+
+  party2:
+    <<: *party-sgx
+
+  party3:
+    <<: *party-sgx
+
+  party4:
+    <<: *party-sgx
+
+  controller:
+    <<: *party-sgx

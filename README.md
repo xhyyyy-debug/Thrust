@@ -23,14 +23,19 @@ The intended execution model is:
 - `host/dkg/params.cpp`: built-in DKG presets such as `bc_params_sns`
 
 **Before You Start**
-- Make sure SGX/Open Enclave is available on the host
+- Make sure SGX/Open Enclave is available on the host if you want hardware SGX mode.
 - Make sure the Open Enclave base image required by `Dockerfile.base` is available under `thirdparty`
-- The compose file maps:
+- `docker-compose.yml` defaults to Open Enclave simulation mode with `OE_SIMULATION=1`.
+- `docker-compose.sgx.yml` enables hardware SGX mode and maps:
   - `/dev/sgx_enclave`
   - `/dev/sgx_provision`
 - `docker-compose.yml` also mounts `./artifacts:/artifacts` so the party containers and controller can share preprocessing/keygen files
 
-If you want simulation mode, run commands with `OE_SIMULATION=1`.
+If you want hardware SGX mode, use both compose files:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.sgx.yml up -d party1 party2 party3 party4
+```
 
 **Build Docker Images**
 ```bash
@@ -43,7 +48,13 @@ docker compose build
 docker compose up -d party1 party2 party3 party4
 ```
 
-This starts four host+enclave party services on the internal Docker network `dkg-net`.
+This starts four host+enclave party services on the internal Docker network `dkg-net` in simulation mode.
+
+For hardware SGX mode, use:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.sgx.yml up -d party1 party2 party3 party4
+```
 
 **Check The Preprocessing Plan**
 Before running preprocessing, it is useful to inspect how many bits / triples / noises are needed for the current config:
